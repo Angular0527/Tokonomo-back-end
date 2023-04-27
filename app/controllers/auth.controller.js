@@ -63,7 +63,7 @@ exports.signup = (req, res) => {
 
 exports.signin = (req, res) => {
   User.findOne({
-    username: req.body.username,
+    email: req.body.email,
   })
     .populate("roles", "-__v")
     .exec((err, user) => {
@@ -73,7 +73,7 @@ exports.signin = (req, res) => {
       }
 
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: "Email Not found." });
       }
 
       var passwordIsValid = bcrypt.compareSync(
@@ -99,7 +99,6 @@ exports.signin = (req, res) => {
 
       res.status(200).send({
         id: user._id,
-        username: user.username,
         email: user.email,
         roles: authorities,
       });
